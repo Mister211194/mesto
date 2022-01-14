@@ -1,0 +1,19 @@
+.profile__add-button {
+    width: 150px;
+    height: 50px;
+    background-color: unset;
+    background-image: url(../../../images/vector-add-button.svg);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-left: auto;
+    outline: none;
+    transition: 0.3s;
+}
+
+.profile__add-button:hover {
+    opacity: 0.6;
+}
