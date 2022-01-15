@@ -10,6 +10,7 @@
     background-repeat: no-repeat;
     border: none;
     outline: none;
+    transition: 0.3s;
 }
 
 .popup__closed:hover {
