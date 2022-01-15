@@ -17,3 +17,12 @@
     opacity: 0.6;
     cursor: pointer;
 }
+
+@media screen and (max-width: 426px) {
+    .popup__closed {
+        right: 0px;
+        width: 20px;
+        height: 20px;
+        background-image: url(../../../images/close-mini.svg);
+    }
+}

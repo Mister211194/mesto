@@ -3,3 +3,11 @@
     margin-left: 30px;
     width: 336px;
 }
+
+@media screen and (max-width: 426px) {
+    .profile__info {
+        margin-left: auto;
+        max-width: 282px;
+        padding: 26px 0 36px;
+    }
+}

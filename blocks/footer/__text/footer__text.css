@@ -1,8 +1,17 @@
 .footer__text {
-    margin: 66px 0 60px;
+    margin: 0;
+    padding: 66px 0 60px;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 22px;
     color: rgba(84, 84, 84, 1);
+}
+
+@media screen and (max-width: 426px) {
+    .footer__text {
+        padding: 48px 19px 36px;
+        font-size: 14px;
+        line-height: 17px;
+    }
 }

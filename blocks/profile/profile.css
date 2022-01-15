@@ -5,5 +5,19 @@
     margin: 0 auto;
     padding: 40px 0 50px;
     max-width: 880px;
-    height: 120px;
+    min-height: 120px;
+}
+
+@media screen and (max-width: 768px) {
+    .profile {
+        padding-left: 27px;
+        padding-right: 27px;
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .profile {
+        padding: 42px 19px 36px;
+        flex-direction: column;
+    }
 }
