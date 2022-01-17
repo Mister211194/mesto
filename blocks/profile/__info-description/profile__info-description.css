@@ -5,13 +5,23 @@
     font-size: 18px;
     line-height: 22px;
     color: #ffffff;
+    max-width: 340px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__info-description {
+        margin: 0 auto;
+        text-align: center;
+    }
 }
 
 @media screen and (max-width: 426px) {
     .profile__info-description {
-        margin: 0 auto;
-        text-align: center;
         font-size: 14px;
         line-height: 17px;
+        max-width: 282px;
     }
 }

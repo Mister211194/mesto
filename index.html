@@ -22,11 +22,11 @@
             <div class="profile__info">
                 <div class="profile__info-user">
                     <h1 class="profile__info-title">Жак-Ив Кусто</h1>
-                    <button class="profile__edit-button" type="button"></button>
+                    <button class="profile__edit-button" type="button" aria-label="Редактировать профиль"></button>
                 </div>
                 <p class="profile__info-description">Исследователь океана</p>
             </div>
-            <button type="button" class="profile__add-button"></button>
+            <button type="button" class="profile__add-button" aria-label="Добавить профиль"></button>
         </section>
         <section class="elements">
             <ul class="elements__grid-cards">
@@ -34,62 +34,64 @@
                     <img src="./images/grid-1.jpg" alt="Замок" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Карачаевск</h2>
-                        <button type="button" class="elements__like-button elements__like-button_active"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
                 <li class="elements__card">
                     <img src="./images/grid-2.jpg" alt="Закат" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Гора Эльбрус</h2>
-                        <button type="button" class="elements__like-button"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
                 <li class="elements__card">
                     <img src="./images/grid-3.jpg" alt="Горы" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Домбай</h2>
-                        <button type="button" class="elements__like-button"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
                 <li class="elements__card">
                     <img src="./images/grid-4.jpg" alt="Горы" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Гора Эльбрус</h2>
-                        <button type="button" class="elements__like-button"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
                 <li class="elements__card">
                     <img src="./images/grid-5.jpg" alt="Закат" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Домбай</h2>
-                        <button type="button" class="elements__like-button"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
                 <li class="elements__card">
                     <img src="./images/grid-6.jpg" alt="Замок" class="elements__card-image">
                     <div class="elements__card-info">
                         <h2 class="elements__card-title">Карачаево-Черкесово</h2>
-                        <button type="button" class="elements__like-button"></button>
+                        <button type="button" class="elements__like-button" aria-label="Лайк"></button>
                     </div>
                 </li>
             </ul>
         </section>
     </main>
     <footer class="footer">
-        <p class="footer__text">© 2022 Mesto Russia</p>
+        <p class="footer__text">&#169; 2022 Mesto Russia</p>
     </footer>
     <section class="popup">
         <div class="popup__container">
             <h2 class="popup__title">Редактировать профиль</h2>
-            <form class="popup__form">
-                <input type="text" class="popup__input" id="input-popup-name" placeholder="Имя">
-                <input type="text" class="popup__input" id="input-popup-description" placeholder="Профессия">
+            <form class="popup__form" name="popup-form">
+                <input type="text" class="popup__input" id="input-popup-name" placeholder="Имя" name="name"
+                    minlength="2" maxlength="25">
+                <input type="text" class="popup__input" id="input-popup-description" placeholder="Профессия" name="job"
+                    minlength="2" maxlength="50">
                 <button type="submit" class="popup__button">Сохранить</button>
             </form>
-            <button type="button" class="popup__closed"></button>
+            <button type="button" class="popup__closed" aria-label="Закрыть"></button>
         </div>
     </section>
-    <script src="./pages/index.js"></script>
+    <script src="./scripts/index.js"></script>
 </body>
 
 </html>

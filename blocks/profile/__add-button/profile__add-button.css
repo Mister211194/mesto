@@ -18,9 +18,10 @@
     opacity: 0.6;
 }
 
-@media screen and (max-width: 426px) {
+@media screen and (max-width: 768px) {
     .profile__add-button {
         width: 282px;
         margin: 0 auto;
+        background-image: url(../../../images/plus-mini.svg);
     }
 }
