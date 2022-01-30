@@ -1,17 +1,20 @@
-.elements__like-button {
+.elements__delete-card {
     margin: 0;
     padding: 0;
-    width: 22px;
+    width: 18px;
     height: 19px;
     border: none;
     cursor: pointer;
     background-color: transparent;
-    background-image: url(../../../images/like-button.svg);
+    background-image: url(../../../images/delete-button.svg);
     background-position: 50% center;
     background-repeat: no-repeat;
     transition: 0.2s;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
-.elements__like-button:hover {
+.elements__delete-card:hover {
     opacity: 0.6;
 }
