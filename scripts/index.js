@@ -1,127 +1,116 @@
+import initialCards from './inital_card.js';
 // Добавление выборки DOM элементов
-const popupOpenButtonElement = document.querySelector('.profile__edit-button');
-const popupElement = document.querySelector('.profile-popup');
-const popupCloseButtonElement = popupElement.querySelector('.popup__closed');
-const formElement = document.querySelector('.popup__form');
+// Переменные popup Профиля
+const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
+const popupProfileElement = document.querySelector('.profile-popup');
+const popupCloseButtonProfileElement = popupProfileElement.querySelector('.popup__closed');
+const formProfileElement = document.querySelector('.popup__form');
 const nameInput = document.getElementById('input-popup-name');
 const jobInput = document.getElementById('input-popup-description');
 const nameUser = document.querySelector('.profile__info-title');
 const jobUser = document.querySelector('.profile__info-description');
-
-// Функции переключения всплывающего окна
-function openPopup() {
-    // Заносим данные в форму при открытии popup
-    nameInput.value = nameUser.textContent;
-    jobInput.value = jobUser.textContent;
-    // Добавление класса для открытия popup
-    popupElement.classList.add('popup_open');
-}
-
-function closePopup() {
-    popupElement.classList.remove('popup_open');
-}
-
-// Функция закрытия попапа при клике на затемненную область
-// function closePopupByClickOverlay(event) {
-//     if (event.target !== event.currentTarget) {
-//         return;
-//     }
-//     closePopup()
-// }
-// popupElement.addEventListener('click', closePopupByClickOverlay);
-
-function formSubmitHandler(evt) {
-    evt.preventDefault();
-    nameUser.textContent = nameInput.value;
-    jobUser.textContent = jobInput.value;
-    closePopup()
-}
-
-// Добавление слушателя на клик
-popupOpenButtonElement.addEventListener('click', openPopup);
-popupCloseButtonElement.addEventListener('click', closePopup);
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formElement.addEventListener('submit', formSubmitHandler);
-
-
+// Переменные popup Добавления карточек
 const popupAddCards = document.querySelector('.add-cards-popup');
 const buttonAddCards = document.querySelector('.profile__add-button');
 const closeButtonAddCardsPopup = popupAddCards.querySelector('.popup__closed');
 const inputAddCardTitile = popupAddCards.querySelector('#input-popup-title');
 const inputAddCardUrl = popupAddCards.querySelector('#input-popup-url');
 const formElementAdd = popupAddCards.querySelector('.popup__form');
+const template = document.querySelector('.template').content;
+const cardsSection = document.querySelector('.elements__grid-cards');
+// Переменные Preview popup
+const popupPreview = document.querySelector('.popup_view-foto');
+
+// Функци открытия popup
+function openPopup(namePopup) {
+    namePopup.classList.add('popup_open');
+}
+// функция закрытия popup
+function closePopup(namePopup) {
+    namePopup.classList.remove('popup_open');
+}
+
+// Функция открытия popup Профиля
+function openProfilePopup() {
+    openPopup(popupProfileElement)
+    // Заносим данные в форму при открытии popup
+    nameInput.value = nameUser.textContent;
+    jobInput.value = jobUser.textContent;
+}
+// Функция изменения значиний в профиле
+function handleProfileFormSubmit(evt) {
+    evt.preventDefault();
+    nameUser.textContent = nameInput.value;
+    jobUser.textContent = jobInput.value;
+    closePopup(popupProfileElement)
+}
+
+// Добавление слушателя на клик
+popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);
+popupCloseButtonProfileElement.addEventListener('click', () => closePopup(popupProfileElement));
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+formProfileElement.addEventListener('submit', handleProfileFormSubmit);
 
 // Открытие попап добавления карточек с фото
-function openAddCardsPopup() {
-    popupAddCards.classList.add('popup_open');
-}
-// Закрытие попап добавления карточек с фото
-function closeAddCardsPopup() {
-    popupAddCards.classList.remove('popup_open');
-
+function openAddCardPopup() {
+    openPopup(popupAddCards)
+    inputAddCardTitile.value = '';
+    inputAddCardUrl.value = '';
 }
 
 // Слушатели на попап добавления карточек
-buttonAddCards.addEventListener('click', openAddCardsPopup);
-closeButtonAddCardsPopup.addEventListener('click', closeAddCardsPopup);
-
-import initialCards from './inital_card.js';
-
-const template = document.querySelector('.template').content;
-const cardsSection = document.querySelector('.elements__grid-cards');
+buttonAddCards.addEventListener('click', openAddCardPopup);
+closeButtonAddCardsPopup.addEventListener('click', () => closePopup(popupAddCards));
 
 function addAllCards() {
-    initialCards.forEach(addCards);
+    initialCards.forEach(addCard);
 }
 
 // функция загрузки карточек
-function addCards(value) {
+function addCard(value) {
     const newCard = template.cloneNode(true); // Клонируем содержимое тимплейта
     const cardImage = newCard.querySelector('.elements__card-image');
     const cardTitle = newCard.querySelector('.elements__card-title');
     cardImage.src = value.link;
     cardTitle.textContent = value.name;
     cardImage.setAttribute("alt", value.name);
-
     addListeners(newCard)
     cardsSection.appendChild(newCard);
+    // Ваш предыдущий комментарий ниже мне совершенно не понятен!(функция добавления карточки в контейнер уже есть: handleCardFormSubmit)
+    // Вставка карточек в контейнер должна происходить в другой функции, так как согласно чек-листу:
+    // Функция выполняет одно действие, например, возвращает готовую карточку
+    // Создайте функцию, которая будет вставлять карточку в контейнер. Вызывать ее будете в функции-сабмите формы добавления карточки и при рендере базовых 6 карточек
 }
 
-function addListeners(el) {
-    el.querySelector('.elements__like-button').addEventListener('click', likeElementActive);
-    el.querySelector('.elements__delete-card').addEventListener('click', cardDelete);
+function addListeners(card) {
+    card.querySelector('.elements__like-button').addEventListener('click', likeElementActive);
+    card.querySelector('.elements__delete-card').addEventListener('click', deleteCard);
 }
-
 // Лайк
 function likeElementActive(event) {
     event.target.classList.toggle('elements__like-button_active')
 }
-
 // Удаление карточки
-function cardDelete(event) {
+function deleteCard(event) {
     event.target.closest('.elements__card').remove();
 }
 
 addAllCards()
 
-
 // Функция добавления карточки
-function formSubmitAddCard(event) {
+function handleCardFormSubmit(event) {
     event.preventDefault();
-
     const newItem = template.cloneNode(true);
     newItem.querySelector('.elements__card-title').textContent = inputAddCardTitile.value;
     newItem.querySelector('.elements__card-image').src = inputAddCardUrl.value;
     newItem.querySelector('.elements__card-image').setAttribute("alt", inputAddCardTitile.value);
-
     addEvList(newItem);
     cardsSection.prepend(newItem);
-
-    closeAddCardsPopup()
+    closePopup(popupAddCards)
 }
 
-formElementAdd.addEventListener('submit', formSubmitAddCard);
+formElementAdd.addEventListener('submit', handleCardFormSubmit);
 
 function addEvList(item) {
     item.querySelector('.elements__delete-card').addEventListener('click', deleteItem);
@@ -136,21 +125,26 @@ function likeItem(event) {
     event.target.classList.toggle('elements__like-button_active')
 }
 
-// Открытие Попап фотки
-const popupPreview = document.querySelector('.popup_view-foto');
-
+// Открытие PreviewPopup фотки
 function openPreviewPopup(event) {
     if (event.target.classList.contains('elements__card-image')) {
-        popupPreview.classList.add('popup_open');
+        openPopup(popupPreview)
         popupPreview.querySelector('.popup__image').src = event.target.src;
+        popupPreview.querySelector('.popup__image').alt = event.target.alt;
         popupPreview.querySelector('.popup__figcaption').textContent = event.target.alt;
     }
 }
 
+// Слушатели открытия и закрытия PreviewPopup
 cardsSection.addEventListener('click', openPreviewPopup);
+popupPreview.querySelector('.popup__closed').addEventListener('click', () => closePopup(popupPreview));
 
-function ClosePreviewPopup() {
-    popupPreview.classList.remove('popup_open');
-}
 
-popupPreview.querySelector('.popup__closed').addEventListener('click', ClosePreviewPopup);
+// Функция закрытия попапа при клике на затемненную область
+// function closePopupByClickOverlay(event) {
+//     if (event.target !== event.currentTarget) {
+//         return;
+//     }
+//     closePopup()
+// }
+// popupProfileElement.addEventListener('click', closePopupByClickOverlay);
