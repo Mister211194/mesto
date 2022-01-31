@@ -20,6 +20,9 @@ const template = document.querySelector('.template').content;
 const cardsSection = document.querySelector('.elements__grid-cards');
 // Переменные Preview popup
 const popupPreview = document.querySelector('.popup_view-foto');
+const buttonClosePreviewPopup = popupPreview.querySelector('.popup__closed');
+const imagePreview = popupPreview.querySelector('.popup__image')
+const titlePreview = popupPreview.querySelector('.popup__figcaption')
 
 // Функци открытия popup
 function openPopup(namePopup) {
@@ -45,13 +48,6 @@ function handleProfileFormSubmit(evt) {
     closePopup(popupProfileElement)
 }
 
-// Добавление слушателя на клик
-popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);
-popupCloseButtonProfileElement.addEventListener('click', () => closePopup(popupProfileElement));
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-formProfileElement.addEventListener('submit', handleProfileFormSubmit);
-
 // Открытие попап добавления карточек с фото
 function openAddCardPopup() {
     openPopup(popupAddCards)
@@ -59,29 +55,31 @@ function openAddCardPopup() {
     inputAddCardUrl.value = '';
 }
 
-// Слушатели на попап добавления карточек
-buttonAddCards.addEventListener('click', openAddCardPopup);
-closeButtonAddCardsPopup.addEventListener('click', () => closePopup(popupAddCards));
-
 function addAllCards() {
-    initialCards.forEach(addCard);
+    initialCards.forEach(renderCard);
 }
 
-// функция загрузки карточек
-function addCard(value) {
+// функция создания карточки
+function addCard(name, link) {
     const newCard = template.cloneNode(true); // Клонируем содержимое тимплейта
     const cardImage = newCard.querySelector('.elements__card-image');
     const cardTitle = newCard.querySelector('.elements__card-title');
-    cardImage.src = value.link;
-    cardTitle.textContent = value.name;
-    cardImage.setAttribute("alt", value.name);
+    cardImage.src = link;
+    cardTitle.textContent = name;
+    cardImage.setAttribute("alt", name);
     addListeners(newCard)
-    cardsSection.appendChild(newCard);
+    return newCard
+}
+
+function renderCard(cardData) {
+    const newCard = addCard(cardData.name, cardData.link)
+    cardsSection.prepend(newCard);
 }
 
 function addListeners(card) {
     card.querySelector('.elements__like-button').addEventListener('click', likeElementActive);
     card.querySelector('.elements__delete-card').addEventListener('click', deleteCard);
+    card.querySelector('.elements__card-image').addEventListener('click', openPreviewPopup);
 }
 // Лайк
 function likeElementActive(event) {
@@ -92,48 +90,39 @@ function deleteCard(event) {
     event.target.closest('.elements__card').remove();
 }
 
-addAllCards()
-
+// P.S. Здесь в функию renderCard не смог додуматься как передать 2 значения.
 // Функция добавления карточки
 function handleCardFormSubmit(event) {
     event.preventDefault();
-    const newItem = template.cloneNode(true);
-    newItem.querySelector('.elements__card-title').textContent = inputAddCardTitile.value;
-    newItem.querySelector('.elements__card-image').src = inputAddCardUrl.value;
-    newItem.querySelector('.elements__card-image').setAttribute("alt", inputAddCardTitile.value);
-    addEvList(newItem);
-    cardsSection.prepend(newItem);
-    closePopup(popupAddCards)
+    const newCard = addCard(inputAddCardTitile.value, inputAddCardUrl.value);
+    cardsSection.prepend(newCard);
+    closePopup(popupAddCards);
 }
 
-formElementAdd.addEventListener('submit', handleCardFormSubmit);
-
-function addEvList(item) {
-    item.querySelector('.elements__delete-card').addEventListener('click', deleteItem);
-    item.querySelector('.elements__like-button').addEventListener('click', likeItem);
-}
-
-function deleteItem(event) {
-    event.target.closest('.elements__card').remove();
-}
-
-function likeItem(event) {
-    event.target.classList.toggle('elements__like-button_active')
-}
-
-// Открытие PreviewPopup фотки
+//P.S Так и не понял какой конкретно параметр можно передать функции addListeners и как это правильно сделать.
+// Если подскажете буду Очень благодарен
+// Функция открытия Previev Popup
 function openPreviewPopup(event) {
-    if (event.target.classList.contains('elements__card-image')) {
-        openPopup(popupPreview)
-        popupPreview.querySelector('.popup__image').src = event.target.src;
-        popupPreview.querySelector('.popup__image').alt = event.target.alt;
-        popupPreview.querySelector('.popup__figcaption').textContent = event.target.alt;
-    }
+    openPopup(popupPreview)
+    imagePreview.src = event.target.src;
+    imagePreview.alt = event.target.alt;
+    titlePreview.textContent = event.target.alt;
 }
 
-// Слушатели открытия и закрытия PreviewPopup
-cardsSection.addEventListener('click', openPreviewPopup);
-popupPreview.querySelector('.popup__closed').addEventListener('click', () => closePopup(popupPreview));
+addAllCards()
+
+buttonClosePreviewPopup.addEventListener('click', () => closePopup(popupPreview));
+// Добавление слушателя на клик Попап Профиля
+popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);
+popupCloseButtonProfileElement.addEventListener('click', () => closePopup(popupProfileElement));
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+formProfileElement.addEventListener('submit', handleProfileFormSubmit);
+// Слушатели на попап добавления карточек
+buttonAddCards.addEventListener('click', openAddCardPopup);
+closeButtonAddCardsPopup.addEventListener('click', () => closePopup(popupAddCards));
+// Слушатель на кнопку добавления карточки
+formElementAdd.addEventListener('submit', handleCardFormSubmit);
 
 
 // Функция закрытия попапа при клике на затемненную область
