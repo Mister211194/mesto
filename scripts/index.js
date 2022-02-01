@@ -60,26 +60,26 @@ function addAllCards() {
 }
 
 // функция создания карточки
-function addCard(name, link) {
+function createCard(name, link) {
     const newCard = template.cloneNode(true); // Клонируем содержимое тимплейта
     const cardImage = newCard.querySelector('.elements__card-image');
     const cardTitle = newCard.querySelector('.elements__card-title');
     cardImage.src = link;
     cardTitle.textContent = name;
     cardImage.setAttribute("alt", name);
-    addListeners(newCard)
+    addListeners(newCard, cardTitle.textContent, cardImage.src,)
     return newCard
 }
 
 function renderCard(cardData) {
-    const newCard = addCard(cardData.name, cardData.link)
+    const newCard = createCard(cardData.name, cardData.link)
     cardsSection.prepend(newCard);
 }
 
-function addListeners(card) {
+function addListeners(card, name, link) {
     card.querySelector('.elements__like-button').addEventListener('click', likeElementActive);
     card.querySelector('.elements__delete-card').addEventListener('click', deleteCard);
-    card.querySelector('.elements__card-image').addEventListener('click', openPreviewPopup);
+    card.querySelector('.elements__card-image').addEventListener('click', () => openPreviewPopup(name, link));
 }
 // Лайк
 function likeElementActive(event) {
@@ -90,23 +90,20 @@ function deleteCard(event) {
     event.target.closest('.elements__card').remove();
 }
 
-// P.S. Здесь в функию renderCard не смог додуматься как передать 2 значения.
 // Функция добавления карточки
 function handleCardFormSubmit(event) {
     event.preventDefault();
-    const newCard = addCard(inputAddCardTitile.value, inputAddCardUrl.value);
+    const newCard = createCard(inputAddCardTitile.value, inputAddCardUrl.value);
     cardsSection.prepend(newCard);
     closePopup(popupAddCards);
 }
 
-//P.S Так и не понял какой конкретно параметр можно передать функции addListeners и как это правильно сделать.
-// Если подскажете буду Очень благодарен
 // Функция открытия Previev Popup
-function openPreviewPopup(event) {
+function openPreviewPopup(name, link) {
     openPopup(popupPreview)
-    imagePreview.src = event.target.src;
-    imagePreview.alt = event.target.alt;
-    titlePreview.textContent = event.target.alt;
+    imagePreview.src = link;
+    imagePreview.alt = name;
+    titlePreview.textContent = name;
 }
 
 addAllCards()
