@@ -72,7 +72,7 @@ function createCard(name, link) {
 }
 
 function renderCard(cardData) {
-    const newCard = createCard(cardData.name, cardData.link)
+    const newCard = createCard(cardData.name, cardData.link);
     cardsSection.prepend(newCard);
 }
 
@@ -93,9 +93,12 @@ function deleteCard(event) {
 // Функция добавления карточки
 function handleCardFormSubmit(event) {
     event.preventDefault();
-    const newCard = createCard(inputAddCardTitile.value, inputAddCardUrl.value);
-    cardsSection.prepend(newCard);
-    closePopup(popupAddCards);
+    const newObjectCard = {
+        name: inputAddCardTitile.value,  //Арина Огромное вам спасибо за развернутые комментарии!
+        link: inputAddCardUrl.value       // Я просто был в ступоре как передать с этих значений объект на вход функции renderCard
+    };                                  // Просто ступор в голове был и все))
+    renderCard(newObjectCard);             // P.S. Наставник так и не ответил:)
+    closePopup(popupAddCards);          // Вы супер! Спасибо еще раз!
 }
 
 // Функция открытия Previev Popup
