@@ -67,7 +67,7 @@ function createCard(name, link) {
     cardImage.src = link;
     cardTitle.textContent = name;
     cardImage.setAttribute("alt", name);
-    addListeners(newCard, cardTitle.textContent, cardImage.src,)
+    addListeners(newCard, name, link,)
     return newCard
 }
 
