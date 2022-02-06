@@ -6,14 +6,14 @@
     line-height: 15px;
     color: #ff0000;
     position: absolute;
-    top: 32px;
+    top: 89px;
     left: 36px;
     opacity: 0;
     transition: 0.2s;
 }
 
 .popup__input-error:nth-child(2) {
-    top: 89px;
+    top: 32px;
 }
 
 @media screen and (max-width: 768px) {
