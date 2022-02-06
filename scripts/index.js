@@ -1,4 +1,4 @@
-import initialCards from './inital_card.js';
+import initialCards from './initalCard.js';
 // Добавление выборки DOM элементов
 // Переменные popup Профиля
 const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
@@ -17,6 +17,7 @@ const closeButtonAddCardsPopup = popupAddCards.querySelector('.popup__closed');
 const formElementAdd = document.forms.add_cards;
 const formInputTitleElement = formElementAdd.elements.title;
 const formInputLinkElement = formElementAdd.elements.link;
+const buttonCreateCard = formElementAdd.elements.create;
 const template = document.querySelector('.template').content;
 const cardsSection = document.querySelector('.elements__grid-cards');
 // Переменные Preview popup
@@ -31,12 +32,14 @@ const popupList = document.querySelectorAll('.popup');
 function openPopup(namePopup) {
     namePopup.classList.add('popup_open');
     namePopup.addEventListener('click', closePopupByClickOverlay);
-    document.addEventListener('keydown', closePopupDownEsc);
+    document.addEventListener('keydown', closeByEscape);
 }
 
 // функция закрытия popup
 function closePopup(namePopup) {
     namePopup.classList.remove('popup_open');
+    namePopup.removeEventListener('click', closePopupByClickOverlay);
+    document.removeEventListener('keydown', closeByEscape);
 }
 
 // Функция закрытия попапа при клике на затемненную область
@@ -46,11 +49,10 @@ function closePopupByClickOverlay(event) {
     }
 }
 
-const closePopupDownEsc = (event) => {
-    if (event.key === 'Escape') {
-        popupList.forEach((popup) => {
-            closePopup(popup);
-        })
+function closeByEscape(evt) {
+    if (evt.key === 'Escape') {
+        const openedPopup = document.querySelector('.popup_open')
+        closePopup(openedPopup);
     }
 }
 
@@ -59,6 +61,7 @@ function openProfilePopup() {
     nameInput.value = nameUser.textContent;
     jobInput.value = jobUser.textContent;
     saveButtonProfile.classList.remove('popup__button_disabled');
+    saveButtonProfile.removeAttribute("disabled", "disabled");
     openPopup(popupProfileElement)
 }
 // Функция изменения значиний в профиле
@@ -118,6 +121,7 @@ function handleCardFormSubmit(event) {
         name: formInputTitleElement.value,
         link: formInputLinkElement.value
     };
+    buttonCreateCard.setAttribute("disabled", "disabled");
     renderCard(newObjectCard);
     closePopup(popupAddCards);
 }
