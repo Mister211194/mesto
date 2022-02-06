@@ -4,18 +4,18 @@ import initialCards from './inital_card.js';
 const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
 const popupProfileElement = document.querySelector('.profile-popup');
 const popupCloseButtonProfileElement = popupProfileElement.querySelector('.popup__closed');
-const formProfileElement = document.querySelector('.popup__form');
-const nameInput = document.getElementById('input-popup-name');
-const jobInput = document.getElementById('input-popup-description');
+const formProfileElement = document.forms.profile_form;
+const nameInput = formProfileElement.elements.name;
+const jobInput = formProfileElement.elements.job;
 const nameUser = document.querySelector('.profile__info-title');
 const jobUser = document.querySelector('.profile__info-description');
 // Переменные popup Добавления карточек
 const popupAddCards = document.querySelector('.add-cards-popup');
 const buttonAddCards = document.querySelector('.profile__add-button');
 const closeButtonAddCardsPopup = popupAddCards.querySelector('.popup__closed');
-const inputAddCardTitile = popupAddCards.querySelector('#input-popup-title');
-const inputAddCardUrl = popupAddCards.querySelector('#input-popup-url');
-const formElementAdd = popupAddCards.querySelector('.popup__form');
+const formElementAdd = document.forms.add_cards;
+const formInputTitleElement = formElementAdd.elements.title;
+const formInputLinkElement = formElementAdd.elements.link;
 const template = document.querySelector('.template').content;
 const cardsSection = document.querySelector('.elements__grid-cards');
 // Переменные Preview popup
@@ -27,6 +27,14 @@ const titlePreview = popupPreview.querySelector('.popup__figcaption')
 // Функци открытия popup
 function openPopup(namePopup) {
     namePopup.classList.add('popup_open');
+    namePopup.addEventListener('click', closePopupByClickOverlay);
+}
+
+// Функция закрытия попапа при клике на затемненную область
+function closePopupByClickOverlay(event) {
+    if (event.target === event.currentTarget) {
+        closePopup(event.target);
+    }
 }
 // функция закрытия popup
 function closePopup(namePopup) {
@@ -51,8 +59,8 @@ function handleProfileFormSubmit(evt) {
 // Открытие попап добавления карточек с фото
 function openAddCardPopup() {
     openPopup(popupAddCards)
-    inputAddCardTitile.value = '';
-    inputAddCardUrl.value = '';
+    formInputTitleElement.value = '';
+    formInputLinkElement.value = '';
 }
 
 function addAllCards() {
@@ -94,11 +102,11 @@ function deleteCard(event) {
 function handleCardFormSubmit(event) {
     event.preventDefault();
     const newObjectCard = {
-        name: inputAddCardTitile.value,  //Арина Огромное вам спасибо за развернутые комментарии!
-        link: inputAddCardUrl.value       // Я просто был в ступоре как передать с этих значений объект на вход функции renderCard
-    };                                  // Просто ступор в голове был и все))
-    renderCard(newObjectCard);             // P.S. Наставник так и не ответил:)
-    closePopup(popupAddCards);          // Вы супер! Спасибо еще раз!
+        name: formInputTitleElement.value,
+        link: formInputLinkElement.value
+    };
+    renderCard(newObjectCard);
+    closePopup(popupAddCards);
 }
 
 // Функция открытия Previev Popup
@@ -123,13 +131,3 @@ buttonAddCards.addEventListener('click', openAddCardPopup);
 closeButtonAddCardsPopup.addEventListener('click', () => closePopup(popupAddCards));
 // Слушатель на кнопку добавления карточки
 formElementAdd.addEventListener('submit', handleCardFormSubmit);
-
-
-// Функция закрытия попапа при клике на затемненную область
-// function closePopupByClickOverlay(event) {
-//     if (event.target !== event.currentTarget) {
-//         return;
-//     }
-//     closePopup()
-// }
-// popupProfileElement.addEventListener('click', closePopupByClickOverlay);

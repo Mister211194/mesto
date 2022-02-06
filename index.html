@@ -39,11 +39,13 @@
     <section class="popup profile-popup">
         <div class="popup__container">
             <h2 class="popup__title">Редактировать профиль</h2>
-            <form class="popup__form" name="popup-form">
-                <input type="text" class="popup__input" id="input-popup-name" placeholder="Имя" name="name"
-                    minlength="2" maxlength="25">
-                <input type="text" class="popup__input" id="input-popup-description" placeholder="Профессия" name="job"
-                    minlength="2" maxlength="50">
+            <form class="popup__form" name="profile_form">
+                <input type="text" class="popup__input" id="input-name" placeholder="Имя" name="name" minlength="2"
+                    maxlength="25">
+                <span class="popup__input-error input-name-error">Выпропустили это поле</span>
+                <input type="text" class="popup__input" id="input-job" placeholder="Профессия" name="job" minlength="2"
+                    maxlength="50">
+                <span class="popup__input-error input-job-error">Выпропустили это поле</span>
                 <button type="submit" class="popup__button">Сохранить</button>
             </form>
             <button type="button" class="popup__closed" aria-label="Закрыть"></button>
@@ -53,11 +55,12 @@
     <section class="popup add-cards-popup">
         <div class="popup__container">
             <h2 class="popup__title">Новое место</h2>
-            <form class="popup__form" name="popup-form">
-                <input type="text" class="popup__input" id="input-popup-title" placeholder="Название" name="name"
+            <form class="popup__form" name="add_cards">
+                <input type="text" class="popup__input" id="input-title" placeholder="Название" name="title"
                     minlength="2" maxlength="25">
-                <input type="url" class="popup__input" id="input-popup-url" placeholder="Ссылка на картинку"
-                    name="link">
+                <span class="popup__input-error input-title-error">Выпропустили это поле</span>
+                <input type="url" class="popup__input" id="input-url" placeholder="Ссылка на картинку" name="link">
+                <span class="popup__input-error input-url-error">Выпропустили это поле</span>
                 <button id="add-card" type="submit" class="popup__button">Создать</button>
             </form>
             <button type="button" class="popup__closed" aria-label="Закрыть"></button>
@@ -85,6 +88,7 @@
         </li>
     </template>
     <script type="module" src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
 </body>
 
 </html>
