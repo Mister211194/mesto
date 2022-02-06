@@ -23,11 +23,19 @@ const popupPreview = document.querySelector('.popup_view-foto');
 const buttonClosePreviewPopup = popupPreview.querySelector('.popup__closed');
 const imagePreview = popupPreview.querySelector('.popup__image')
 const titlePreview = popupPreview.querySelector('.popup__figcaption')
+//Переменная всех Popup
+const popupList = document.querySelectorAll('.popup');
 
 // Функци открытия popup
 function openPopup(namePopup) {
     namePopup.classList.add('popup_open');
     namePopup.addEventListener('click', closePopupByClickOverlay);
+    document.addEventListener('keydown', closePopupDownEsc);
+}
+
+// функция закрытия popup
+function closePopup(namePopup) {
+    namePopup.classList.remove('popup_open');
 }
 
 // Функция закрытия попапа при клике на затемненную область
@@ -36,9 +44,13 @@ function closePopupByClickOverlay(event) {
         closePopup(event.target);
     }
 }
-// функция закрытия popup
-function closePopup(namePopup) {
-    namePopup.classList.remove('popup_open');
+
+const closePopupDownEsc = (event) => {
+    if (event.key === 'Escape') {
+        popupList.forEach((popup) => {
+            closePopup(popup);
+        })
+    }
 }
 
 // Функция открытия popup Профиля
