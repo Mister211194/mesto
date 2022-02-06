@@ -7,6 +7,7 @@ const popupCloseButtonProfileElement = popupProfileElement.querySelector('.popup
 const formProfileElement = document.forms.profile_form;
 const nameInput = formProfileElement.elements.name;
 const jobInput = formProfileElement.elements.job;
+const saveButtonProfile = formProfileElement.elements.save;
 const nameUser = document.querySelector('.profile__info-title');
 const jobUser = document.querySelector('.profile__info-description');
 // Переменные popup Добавления карточек
@@ -55,10 +56,10 @@ const closePopupDownEsc = (event) => {
 
 // Функция открытия popup Профиля
 function openProfilePopup() {
-    openPopup(popupProfileElement)
-    // Заносим данные в форму при открытии popup
     nameInput.value = nameUser.textContent;
     jobInput.value = jobUser.textContent;
+    saveButtonProfile.classList.remove('popup__button_disabled');
+    openPopup(popupProfileElement)
 }
 // Функция изменения значиний в профиле
 function handleProfileFormSubmit(evt) {
