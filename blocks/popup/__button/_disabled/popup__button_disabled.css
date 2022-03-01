@@ -1,7 +1,8 @@
-.popup__button_disabled {
+.popup__button:disabled {
     border: solid 2px #00000033;
     color: #00000033;
     background-color: transparent;
     pointer-events: none;
     user-select: none;
+    cursor: not-allowed;
 }
