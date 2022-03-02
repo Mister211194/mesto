@@ -1,4 +1,9 @@
 import initialCards from './initalCard.js';
+<<<<<<< HEAD
+=======
+import FormValidator from './FormValidator.js';
+import Card from './Card.js';
+>>>>>>> develop
 // Добавление выборки DOM элементов
 // Переменные popup Профиля
 const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
@@ -18,15 +23,25 @@ const formElementAdd = document.forms.add_cards;
 const formInputTitleElement = formElementAdd.elements.title;
 const formInputLinkElement = formElementAdd.elements.link;
 const buttonCreateCard = formElementAdd.elements.create;
+<<<<<<< HEAD
 const template = document.querySelector('.template').content;
+=======
+>>>>>>> develop
 const cardsSection = document.querySelector('.elements__grid-cards');
 // Переменные Preview popup
 const popupPreview = document.querySelector('.popup_view-foto');
 const buttonClosePreviewPopup = popupPreview.querySelector('.popup__closed');
 const imagePreview = popupPreview.querySelector('.popup__image')
 const titlePreview = popupPreview.querySelector('.popup__figcaption')
-//Переменная всех Popup
-const popupList = document.querySelectorAll('.popup');
+//
+const dataForm = {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type-error',
+    errorClass: 'popup__input-error_active'
+}
+
 
 // Функци открытия popup
 function openPopup(namePopup) {
@@ -56,12 +71,25 @@ function closeByEscape(evt) {
     }
 }
 
+function clearErrorProfilePopup() {
+    const errorElements = [...formProfileElement.querySelectorAll('.popup__input-error')];
+    const inputElements = [...formProfileElement.querySelectorAll('.popup__input')];
+    errorElements.forEach((errorElement) => errorElement.classList.remove('popup__input-error_active'));
+    inputElements.forEach((errorElement) => errorElement.classList.remove('popup__input_type-error'));
+}
+
 // Функция открытия popup Профиля
 function openProfilePopup() {
-    nameInput.value = nameUser.textContent;
-    jobInput.value = jobUser.textContent;
+    clearErrorProfilePopup();
     saveButtonProfile.classList.remove('popup__button_disabled');
     saveButtonProfile.removeAttribute("disabled", "disabled");
+    nameInput.value = nameUser.textContent;
+    jobInput.value = jobUser.textContent;
+<<<<<<< HEAD
+    saveButtonProfile.classList.remove('popup__button_disabled');
+    saveButtonProfile.removeAttribute("disabled", "disabled");
+=======
+>>>>>>> develop
     openPopup(popupProfileElement)
 }
 // Функция изменения значиний в профиле
@@ -79,40 +107,15 @@ function openAddCardPopup() {
     formInputLinkElement.value = '';
 }
 
-function addAllCards() {
-    initialCards.forEach(renderCard);
-}
-
-// функция создания карточки
-function createCard(name, link) {
-    const newCard = template.cloneNode(true); // Клонируем содержимое тимплейта
-    const cardImage = newCard.querySelector('.elements__card-image');
-    const cardTitle = newCard.querySelector('.elements__card-title');
-    cardImage.src = link;
-    cardTitle.textContent = name;
-    cardImage.setAttribute("alt", name);
-    addListeners(newCard, name, link,)
-    return newCard
-}
-
 function renderCard(cardData) {
-    const newCard = createCard(cardData.name, cardData.link);
+    const newCard = new Card(cardData, '.template').returnCard();
     cardsSection.prepend(newCard);
 }
 
-function addListeners(card, name, link) {
-    card.querySelector('.elements__like-button').addEventListener('click', likeElementActive);
-    card.querySelector('.elements__delete-card').addEventListener('click', deleteCard);
-    card.querySelector('.elements__card-image').addEventListener('click', () => openPreviewPopup(name, link));
+function addAllCards() {
+    initialCards.forEach(renderCard);
 }
-// Лайк
-function likeElementActive(event) {
-    event.target.classList.toggle('elements__like-button_active')
-}
-// Удаление карточки
-function deleteCard(event) {
-    event.target.closest('.elements__card').remove();
-}
+addAllCards()
 
 // Функция добавления карточки
 function handleCardFormSubmit(event) {
@@ -127,14 +130,20 @@ function handleCardFormSubmit(event) {
 }
 
 // Функция открытия Previev Popup
-function openPreviewPopup(name, link) {
-    openPopup(popupPreview)
-    imagePreview.src = link;
-    imagePreview.alt = name;
-    titlePreview.textContent = name;
+function openPreviewPopup(evt) {
+    if (evt.target.classList.contains('elements__card-image')) {
+        openPopup(popupPreview)
+        imagePreview.src = evt.target.src;
+        imagePreview.alt = evt.target.alt;
+        titlePreview.textContent = evt.target.alt;
+    }
 }
 
-addAllCards()
+// Валидация форм
+new FormValidator(dataForm, formProfileElement).enableValidation();
+new FormValidator(dataForm, formElementAdd).enableValidation();
+
+cardsSection.addEventListener('click', openPreviewPopup);
 
 buttonClosePreviewPopup.addEventListener('click', () => closePopup(popupPreview));
 // Добавление слушателя на клик Попап Профиля
