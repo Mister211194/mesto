@@ -1,4 +1,5 @@
 import initialCards from './initalCard.js';
+import FormValidator from './FormValidator.js';
 import Card from './Card.js';
 // Добавление выборки DOM элементов
 // Переменные popup Профиля
@@ -25,6 +26,14 @@ const popupPreview = document.querySelector('.popup_view-foto');
 const buttonClosePreviewPopup = popupPreview.querySelector('.popup__closed');
 const imagePreview = popupPreview.querySelector('.popup__image')
 const titlePreview = popupPreview.querySelector('.popup__figcaption')
+//
+const dataForm = {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type-error',
+    errorClass: 'popup__input-error_active'
+}
 
 
 // Функци открытия popup
@@ -117,6 +126,11 @@ function openPreviewPopup(evt) {
         titlePreview.textContent = evt.target.alt;
     }
 }
+
+// Валидация форм
+new FormValidator(dataForm, formProfileElement).enableValidation();
+new FormValidator(dataForm, formElementAdd).enableValidation();
+
 cardsSection.addEventListener('click', openPreviewPopup);
 
 buttonClosePreviewPopup.addEventListener('click', () => closePopup(popupPreview));
