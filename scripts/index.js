@@ -1,9 +1,6 @@
 import initialCards from './initalCard.js';
-<<<<<<< HEAD
-=======
 import FormValidator from './FormValidator.js';
 import Card from './Card.js';
->>>>>>> develop
 // Добавление выборки DOM элементов
 // Переменные popup Профиля
 const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
@@ -23,10 +20,6 @@ const formElementAdd = document.forms.add_cards;
 const formInputTitleElement = formElementAdd.elements.title;
 const formInputLinkElement = formElementAdd.elements.link;
 const buttonCreateCard = formElementAdd.elements.create;
-<<<<<<< HEAD
-const template = document.querySelector('.template').content;
-=======
->>>>>>> develop
 const cardsSection = document.querySelector('.elements__grid-cards');
 // Переменные Preview popup
 const popupPreview = document.querySelector('.popup_view-foto');
@@ -85,11 +78,6 @@ function openProfilePopup() {
     saveButtonProfile.removeAttribute("disabled", "disabled");
     nameInput.value = nameUser.textContent;
     jobInput.value = jobUser.textContent;
-<<<<<<< HEAD
-    saveButtonProfile.classList.remove('popup__button_disabled');
-    saveButtonProfile.removeAttribute("disabled", "disabled");
-=======
->>>>>>> develop
     openPopup(popupProfileElement)
 }
 // Функция изменения значиний в профиле
