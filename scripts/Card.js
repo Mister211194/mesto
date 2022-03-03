@@ -1,22 +1,23 @@
 export default class Card {
-    constructor(data, templateSelector) {
-        this.title = data.name;
-        this.link = data.link;
-        this.template = document.querySelector(templateSelector);
+    constructor(data, templateSelector, handleCardClick) {
+        this._title = data.name;
+        this._link = data.link;
+        this._template = document.querySelector(templateSelector);
+        this._handleCardClick = handleCardClick;
     }
 
     _getNewCardElement() {
-        return this.template.content.querySelector('.elements__card').cloneNode(true);
+        return this._template.content.querySelector('.elements__card').cloneNode(true);
     }
 
     _createNewCard() {
-        const newCard = this._getNewCardElement();
-        const cardImage = newCard.querySelector('.elements__card-image');
-        const cardTitle = newCard.querySelector('.elements__card-title');
-        cardImage.src = this.link;
-        cardTitle.textContent = this.title;
-        cardImage.setAttribute("alt", this.title);
-        this._card = newCard;
+        this._newCard = this._getNewCardElement();
+        this._cardImage = this._newCard.querySelector('.elements__card-image');
+        this._cardTitle = this._newCard.querySelector('.elements__card-title');
+        this._cardImage.src = this._link;
+        this._cardImage.alt = this._title;
+        this._cardTitle.textContent = this._title;
+        this._card = this._newCard;
     }
 
     _likeElementActive(event) {
@@ -30,6 +31,10 @@ export default class Card {
     _addListeners() {
         this._card.querySelector('.elements__like-button').addEventListener('click', (event) => this._likeElementActive(event));
         this._card.querySelector('.elements__delete-card').addEventListener('click', (event) => this._deleteCard(event));
+        this._cardImage.addEventListener('click', () => {
+            this._handleCardClick(this._title, this._link)
+        });
+
     }
 
     returnCard() {

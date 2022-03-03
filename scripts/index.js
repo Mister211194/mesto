@@ -1,41 +1,12 @@
 import initialCards from './initalCard.js';
 import FormValidator from './FormValidator.js';
 import Card from './Card.js';
-// Добавление выборки DOM элементов
-// Переменные popup Профиля
-const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
-const popupProfileElement = document.querySelector('.profile-popup');
-const popupCloseButtonProfileElement = popupProfileElement.querySelector('.popup__closed');
-const formProfileElement = document.forms.profile_form;
-const nameInput = formProfileElement.elements.name;
-const jobInput = formProfileElement.elements.job;
-const saveButtonProfile = formProfileElement.elements.save;
-const nameUser = document.querySelector('.profile__info-title');
-const jobUser = document.querySelector('.profile__info-description');
-// Переменные popup Добавления карточек
-const popupAddCards = document.querySelector('.add-cards-popup');
-const buttonAddCards = document.querySelector('.profile__add-button');
-const closeButtonAddCardsPopup = popupAddCards.querySelector('.popup__closed');
-const formElementAdd = document.forms.add_cards;
-const formInputTitleElement = formElementAdd.elements.title;
-const formInputLinkElement = formElementAdd.elements.link;
-const buttonCreateCard = formElementAdd.elements.create;
-const cardsSection = document.querySelector('.elements__grid-cards');
-// Переменные Preview popup
-const popupPreview = document.querySelector('.popup_view-foto');
-const buttonClosePreviewPopup = popupPreview.querySelector('.popup__closed');
-const imagePreview = popupPreview.querySelector('.popup__image')
-const titlePreview = popupPreview.querySelector('.popup__figcaption')
-//
-const dataForm = {
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type-error',
-    errorClass: 'popup__input-error_active'
-}
-
-
+import {
+    popups, popupOpenButtonProfileElement, popupProfileElement, formProfileElement,
+    nameInput, jobInput, nameUser, jobUser, popupAddCards, buttonAddCards,
+    formElementAdd, formInputTitleElement, formInputLinkElement, cardsSection, popupPreview,
+    imagePreview, titlePreview, formValidators, dataForm
+} from '../utils/constants.js';
 // Функци открытия popup
 function openPopup(namePopup) {
     namePopup.classList.add('popup_open');
@@ -49,6 +20,18 @@ function closePopup(namePopup) {
     namePopup.removeEventListener('click', closePopupByClickOverlay);
     document.removeEventListener('keydown', closeByEscape);
 }
+
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup_open')) {
+            closePopup(popup)
+        }
+        if (evt.target.classList.contains('popup__closed')) {
+            closePopup(popup)
+        }
+    })
+})
+
 
 // Функция закрытия попапа при клике на затемненную область
 function closePopupByClickOverlay(event) {
@@ -64,18 +47,8 @@ function closeByEscape(evt) {
     }
 }
 
-function clearErrorProfilePopup() {
-    const errorElements = [...formProfileElement.querySelectorAll('.popup__input-error')];
-    const inputElements = [...formProfileElement.querySelectorAll('.popup__input')];
-    errorElements.forEach((errorElement) => errorElement.classList.remove('popup__input-error_active'));
-    inputElements.forEach((errorElement) => errorElement.classList.remove('popup__input_type-error'));
-}
-
 // Функция открытия popup Профиля
 function openProfilePopup() {
-    clearErrorProfilePopup();
-    saveButtonProfile.classList.remove('popup__button_disabled');
-    saveButtonProfile.removeAttribute("disabled", "disabled");
     nameInput.value = nameUser.textContent;
     jobInput.value = jobUser.textContent;
     openPopup(popupProfileElement)
@@ -91,13 +64,15 @@ function handleProfileFormSubmit(evt) {
 // Открытие попап добавления карточек с фото
 function openAddCardPopup() {
     openPopup(popupAddCards)
-    formInputTitleElement.value = '';
-    formInputLinkElement.value = '';
+    formElementAdd.reset();
+}
+
+function createCard(cardData) {
+    return new Card(cardData, '.template', handleCardClick).returnCard();
 }
 
 function renderCard(cardData) {
-    const newCard = new Card(cardData, '.template').returnCard();
-    cardsSection.prepend(newCard);
+    cardsSection.prepend(createCard(cardData));
 }
 
 function addAllCards() {
@@ -112,36 +87,42 @@ function handleCardFormSubmit(event) {
         name: formInputTitleElement.value,
         link: formInputLinkElement.value
     };
-    buttonCreateCard.setAttribute("disabled", "disabled");
     renderCard(newObjectCard);
     closePopup(popupAddCards);
 }
 
-// Функция открытия Previev Popup
-function openPreviewPopup(evt) {
-    if (evt.target.classList.contains('elements__card-image')) {
-        openPopup(popupPreview)
-        imagePreview.src = evt.target.src;
-        imagePreview.alt = evt.target.alt;
-        titlePreview.textContent = evt.target.alt;
-    }
+function handleCardClick(name, link) {
+    imagePreview.src = link;
+    imagePreview.alt = name;
+    titlePreview.textContent = name;
+    openPopup(popupPreview);
 }
 
 // Валидация форм
-new FormValidator(dataForm, formProfileElement).enableValidation();
-new FormValidator(dataForm, formElementAdd).enableValidation();
+function enableValidation(config) {
+    const formList = Array.from(document.querySelectorAll(config.formSelector));
+    formList.forEach(formElement => {
+        const validator = new FormValidator(config, formElement);
+        const formName = formElement.getAttribute('name');
+        formValidators[formName] = validator;
+        console.log(formName)
+        validator.enableValidation()
+    })
+}
+enableValidation(dataForm);
 
-cardsSection.addEventListener('click', openPreviewPopup);
-
-buttonClosePreviewPopup.addEventListener('click', () => closePopup(popupPreview));
 // Добавление слушателя на клик Попап Профиля
-popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);
-popupCloseButtonProfileElement.addEventListener('click', () => closePopup(popupProfileElement));
+popupOpenButtonProfileElement.addEventListener('click', () => {
+    formValidators['profile_form'].resetValidation();
+    openProfilePopup();
+});
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 formProfileElement.addEventListener('submit', handleProfileFormSubmit);
 // Слушатели на попап добавления карточек
-buttonAddCards.addEventListener('click', openAddCardPopup);
-closeButtonAddCardsPopup.addEventListener('click', () => closePopup(popupAddCards));
+buttonAddCards.addEventListener('click', () => {
+    formValidators['add_cards'].resetValidation();
+    openAddCardPopup();
+});
 // Слушатель на кнопку добавления карточки
 formElementAdd.addEventListener('submit', handleCardFormSubmit);
