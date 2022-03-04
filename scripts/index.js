@@ -10,14 +10,12 @@ import {
 // Функци открытия popup
 function openPopup(namePopup) {
     namePopup.classList.add('popup_open');
-    namePopup.addEventListener('click', closePopupByClickOverlay);
     document.addEventListener('keydown', closeByEscape);
 }
 
 // функция закрытия popup
 function closePopup(namePopup) {
     namePopup.classList.remove('popup_open');
-    namePopup.removeEventListener('click', closePopupByClickOverlay);
     document.removeEventListener('keydown', closeByEscape);
 }
 
@@ -31,14 +29,6 @@ popups.forEach((popup) => {
         }
     })
 })
-
-
-// Функция закрытия попапа при клике на затемненную область
-function closePopupByClickOverlay(event) {
-    if (event.target === event.currentTarget) {
-        closePopup(event.target);
-    }
-}
 
 function closeByEscape(evt) {
     if (evt.key === 'Escape') {
@@ -113,16 +103,16 @@ enableValidation(dataForm);
 
 // Добавление слушателя на клик Попап Профиля
 popupOpenButtonProfileElement.addEventListener('click', () => {
-    formValidators['profile_form'].resetValidation();
     openProfilePopup();
+    formValidators['profile_form'].resetValidation();
 });
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 formProfileElement.addEventListener('submit', handleProfileFormSubmit);
 // Слушатели на попап добавления карточек
 buttonAddCards.addEventListener('click', () => {
-    formValidators['add_cards'].resetValidation();
     openAddCardPopup();
+    formValidators['add_cards'].resetValidation();
 });
 // Слушатель на кнопку добавления карточки
 formElementAdd.addEventListener('submit', handleCardFormSubmit);
