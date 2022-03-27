@@ -32,7 +32,7 @@ export default class Card {
         this._card.querySelector('.elements__like-button').addEventListener('click', (event) => this._likeElementActive(event));
         this._card.querySelector('.elements__delete-card').addEventListener('click', (event) => this._deleteCard(event));
         this._cardImage.addEventListener('click', () => {
-            this._handleCardClick(this._title, this._link)
+            this._handleCardClick({ name: this._title, link: this._link })
         });
 
     }
