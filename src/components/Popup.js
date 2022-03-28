@@ -8,13 +8,13 @@ export default class Popup {
     // Функци открытия popup
     open() {
         this._popup.classList.add('popup_open');
-        this.setEventListeners();
+        document.addEventListener('keydown', this._closeByEscape);
     }
 
     // функция закрытия popup
     close() {
         this._popup.classList.remove('popup_open');
-        this._removeEventListeners();
+        document.removeEventListener('keydown', this._closeByEscape);
     }
 
     _closeByEscape(evt) {
@@ -32,14 +32,8 @@ export default class Popup {
         }
     }
 
-    _removeEventListeners() {
-        this._popup.removeEventListener('mousedown', this._closeByClick);
-        document.removeEventListener('keydown', this._closeByEscape);
-    }
-
     setEventListeners() {
         this._popup.addEventListener('mousedown', this._closeByClick);
-        document.addEventListener('keydown', this._closeByEscape);
     }
 
 }

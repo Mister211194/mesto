@@ -15,19 +15,29 @@ import './index.css';
 
 const userInfo = new UserInfo(profileInfo);
 const popupEditProfile = new PopupWithForm(popupProfile, handleProfileSubmit);
+popupEditProfile.setEventListeners();
 
 function handleProfileSubmit(userData) {
     userInfo.setUserInfo(userData);
     popupEditProfile.close();
 }
 
-const cardsList = new Section({ items: initialCards, renderer: createCard }, cardsSection);
+const cardsList = new Section(
+    {
+        items: initialCards,
+        renderer: (item) => {
+            const card = createCard(item);
+            cardsList.addItem(card);
+        }
+    },
+    cardsSection);
 
 function createCard(cardData) {
     return new Card(cardData, '.template', handleCardClick).returnCard();
 }
 
 const popupAdd = new PopupWithForm(popupAddCards, handleAddSubmit);
+popupAdd.setEventListeners();
 
 function handleAddSubmit(cardData) {
     cardsList.addItem(createCard(cardData));
@@ -35,15 +45,17 @@ function handleAddSubmit(cardData) {
 }
 
 const popupImage = new PopupWithImage(popupPreview);
-const EditProfileValidator = new FormValidator(dataForm, formProfileElement)
-const AddCardValidator = new FormValidator(dataForm, formElementAdd);
+popupImage.setEventListeners();
+
+const profileEditFormValidator = new FormValidator(dataForm, formProfileElement)
+const cardAddFormValidator = new FormValidator(dataForm, formElementAdd);
 
 function handleCardClick(data) {
     popupImage.open(data);
 }
 
 function openProfilePopup() {
-    EditProfileValidator.resetValidation();
+    profileEditFormValidator.resetValidation();
     nameInput.value = userInfo.getUserInfo().name;
     infoInput.value = userInfo.getUserInfo().info;
     popupEditProfile.open();
@@ -51,12 +63,12 @@ function openProfilePopup() {
 
 
 function openAddPopup() {
-    AddCardValidator.resetValidation();
+    cardAddFormValidator.resetValidation();
     popupAdd.open();
 }
 
-EditProfileValidator.enableValidation();
-AddCardValidator.enableValidation();
+profileEditFormValidator.enableValidation();
+cardAddFormValidator.enableValidation();
 
 cardsList.renderItems();
 
