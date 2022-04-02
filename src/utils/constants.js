@@ -2,7 +2,7 @@
 export const popupOpenButtonProfileElement = document.querySelector('.profile__edit-button');
 export const formProfileElement = document.forms.profile_form;
 export const nameInput = formProfileElement.elements.name;
-export const infoInput = formProfileElement.elements.info;
+export const infoInput = formProfileElement.elements.about;
 export const profileInfo = {
     nameProfileSelector: '.profile__info-title',
     infoProfileSelector: '.profile__info-description'

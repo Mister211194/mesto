@@ -21,8 +21,10 @@
 @import url(../blocks/elements/__card-image/elements__card-image.css);
 @import url(../blocks/elements/__card-info/elements__card-info.css);
 @import url(../blocks/elements/__card-title/elements__card-title.css);
+@import url(../blocks/elements/__card-like/elements__card-like.css);
 @import url(../blocks/elements/__like-button/elements__like-button.css);
 @import url(../blocks/elements/__like-button/_active/elements__like-button_active.css);
+@import url(../blocks/elements/__like-number/elements__like-number.css);
 @import url(../blocks/elements/__delete-card/elements__delete-card.css);
 
 @import url(../blocks/footer/footer.css);

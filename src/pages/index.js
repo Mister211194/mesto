@@ -3,28 +3,49 @@ import {
     nameInput, infoInput, profileInfo, popupProfile, popupAddCards, buttonAddCards,
     formElementAdd, cardsSection, popupPreview, dataForm
 } from '../utils/constants.js';
-import initialCards from '../components/initalCard.js';
 import FormValidator from '../components/FormValidator.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js'
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
+import PopupConfirm from "../components/PopupConfirm.js"
 
 import './index.css';
 
+import { api } from "../components/Api.js"
+
 const userInfo = new UserInfo(profileInfo);
+const userDatafromServer = api.getUserInfo();
+
+Promise.all([userDatafromServer, api.getInitalCards()])
+    .then(([userData, cardsData]) => {
+        userInfo.setUserInfo(userData);
+
+        cardsList.setItems(cardsData);
+        cardsList.renderItems();
+    })
+    .catch((err) => {
+        console.log(`Произошла ошибка при загрузке страницы: ${err}`);
+    });
+
 const popupEditProfile = new PopupWithForm(popupProfile, handleProfileSubmit);
 popupEditProfile.setEventListeners();
 
+const popupDeleteConfirm = new PopupConfirm('.popup_delete-confirm');
+popupDeleteConfirm.setEventListeners();
+
 function handleProfileSubmit(userData) {
-    userInfo.setUserInfo(userData);
-    popupEditProfile.close();
+    api.editUserInfo(userData)
+        .then(res => {
+            userInfo.setUserInfo(res);
+            popupEditProfile.close();
+        }).catch(err => console.log(`Данные не загружены: ${err}`))
 }
 
 const cardsList = new Section(
     {
-        items: initialCards,
+        items: [],
         renderer: (item) => {
             const card = createCard(item);
             cardsList.addItem(card);
@@ -33,15 +54,42 @@ const cardsList = new Section(
     cardsSection);
 
 function createCard(cardData) {
-    return new Card(cardData, '.template', handleCardClick).returnCard();
+    const card = new Card(
+        cardData,
+        '.template',
+        userDatafromServer,
+        handleCardClick,
+        () => {
+            handleDeleteClick(card, cardData._id)
+        }
+    );
+    return card.returnCard();
 }
 
 const popupAdd = new PopupWithForm(popupAddCards, handleAddSubmit);
 popupAdd.setEventListeners();
 
 function handleAddSubmit(cardData) {
-    cardsList.addItem(createCard(cardData));
+    api.addNewCard(cardData)
+        .then(res => {
+            cardsList.addItem(createCard(res))
+        }).catch(err => console.log(`Произошла ошибка при добавлении карточки: ${err}`))
     popupAdd.close();
+}
+
+function handleDeleteClick(card, cardId) {
+    console.log(card)
+    popupDeleteConfirm.open();
+    console.log(cardId)
+    popupDeleteConfirm.setSubmitForm(() => {
+        api.deleteCard(cardId)
+            .then(res => {
+                console.log(res)
+                card.deleteCardFromDom();
+                popupDeleteConfirm.close();
+            })
+            .catch(err => console.log("Произошла ошибка при удалении карточки", err))
+    })
 }
 
 const popupImage = new PopupWithImage(popupPreview);
@@ -57,7 +105,7 @@ function handleCardClick(data) {
 function openProfilePopup() {
     profileEditFormValidator.resetValidation();
     nameInput.value = userInfo.getUserInfo().name;
-    infoInput.value = userInfo.getUserInfo().info;
+    infoInput.value = userInfo.getUserInfo().about;
     popupEditProfile.open();
 }
 
@@ -69,8 +117,6 @@ function openAddPopup() {
 
 profileEditFormValidator.enableValidation();
 cardAddFormValidator.enableValidation();
-
-cardsList.renderItems();
 
 popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);
 buttonAddCards.addEventListener('click', openAddPopup);
