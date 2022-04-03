@@ -49,6 +49,18 @@ class Api {
             method: 'DELETE',
         })
     }
+
+    AddLike(cardId) {
+        return this._fetch(`/cards/${cardId}/likes`, {
+            method: 'PUT',
+        })
+    }
+
+    deleteLike(cardId) {
+        return this._fetch(`/cards/${cardId}/likes`, {
+            method: 'DELETE',
+        })
+    }
 }
 
 export const api = new Api({

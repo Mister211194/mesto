@@ -21,7 +21,7 @@ const userDatafromServer = api.getUserInfo();
 Promise.all([userDatafromServer, api.getInitalCards()])
     .then(([userData, cardsData]) => {
         userInfo.setUserInfo(userData);
-
+        userInfo.setUserId(userData._id);
         cardsList.setItems(cardsData);
         cardsList.renderItems();
     })
@@ -57,10 +57,13 @@ function createCard(cardData) {
     const card = new Card(
         cardData,
         '.template',
-        userDatafromServer,
+        userInfo.getUserId(),
         handleCardClick,
         () => {
             handleDeleteClick(card, cardData._id)
+        },
+        (id) => {
+            handleLikeClick(id, card)
         }
     );
     return card.returnCard();
@@ -75,6 +78,23 @@ function handleAddSubmit(cardData) {
             cardsList.addItem(createCard(res))
         }).catch(err => console.log(`Произошла ошибка при добавлении карточки: ${err}`))
     popupAdd.close();
+}
+
+function handleLikeClick(id, card) {
+    console.log('like')
+    if (card.isLiked()) {
+        api.deleteLike(id)
+            .then(res => {
+                console.log(res)
+                card.setLikes(res.likes)
+            })
+    } else {
+        api.AddLike(id)
+            .then(res => {
+                console.log(res)
+                card.setLikes(res.likes)
+            })
+    }
 }
 
 function handleDeleteClick(card, cardId) {
