@@ -6,6 +6,7 @@ export default class PopupWithForm extends Popup {
         this._form = this._popup.querySelector('.popup__form')
         this._inputsList = [...this._form.querySelectorAll('.popup__input')]
         this._handleFormSubmit = handleFormSubmit
+        this._buttonSubmit = this._popup.querySelector('.popup__button')
     }
 
     _getInputValues() {
@@ -14,6 +15,19 @@ export default class PopupWithForm extends Popup {
             inputsValue[item.name] = item.value
         })
         return inputsValue;
+    }
+
+    loader(isLoading) {
+        if (isLoading) {
+            this._buttonSubmit.textContent = 'Сохранение...'
+        } else {
+            if (this._popup.classList.contains('add-cards-popup')) {
+                this._buttonSubmit.textContent = 'Создать'
+            } else {
+                this._buttonSubmit.textContent = 'Сохранить'
+            }
+
+        }
     }
 
     setEventListeners() {

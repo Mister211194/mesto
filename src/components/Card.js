@@ -50,9 +50,9 @@ export default class Card {
     }
 
 
-    _deleteCard() {
-        this._handleDeleteClick(this._cardId);
-    }
+    // _deleteCard() {
+    //     this._handleDeleteClick(this._cardId);
+    // }
 
     deleteCardFromDom() {
         this._card.remove();
@@ -67,7 +67,7 @@ export default class Card {
 
     _addListeners() {
         this._buttonLike.addEventListener('click', () => this._handleLikeClick(this._cardId));
-        this._buttonDelete.addEventListener('click', () => this._deleteCard());
+        this._buttonDelete.addEventListener('click', () => this._handleDeleteClick(this._cardId));
         this._cardImage.addEventListener('click', () => {
             this._handleCardClick({ name: this._title, link: this._link })
         });

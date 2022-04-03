@@ -5,9 +5,13 @@ export const nameInput = formProfileElement.elements.name;
 export const infoInput = formProfileElement.elements.about;
 export const profileInfo = {
     nameProfileSelector: '.profile__info-title',
-    infoProfileSelector: '.profile__info-description'
+    infoProfileSelector: '.profile__info-description',
+    AvatarEditSelector: '.profile__avatar'
 }
 export const popupProfile = '.profile-popup';
+export const popupAvatar = '.popup_edit-avatar';
+export const popupAvatarOpenBtn = document.querySelector('.profile__avatar-container');
+export const formPopupAvatar = document.forms.edit_avatar_form;
 
 
 // Переменные popup Добавления карточек

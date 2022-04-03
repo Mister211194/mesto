@@ -61,6 +61,13 @@ class Api {
             method: 'DELETE',
         })
     }
+
+    editAvatar({ avatar }) {
+        return this._fetch("/users/me/avatar", {
+            method: 'PATCH',
+            body: JSON.stringify({ avatar }),
+        })
+    }
 }
 
 export const api = new Api({
