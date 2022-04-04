@@ -50,7 +50,7 @@ class Api {
         })
     }
 
-    AddLike(cardId) {
+    addLike(cardId) {
         return this._fetch(`/cards/${cardId}/likes`, {
             method: 'PUT',
         })

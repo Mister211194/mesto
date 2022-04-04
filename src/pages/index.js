@@ -31,31 +31,30 @@ Promise.all([userDatafromServer, api.getInitalCards()])
         console.log(`Произошла ошибка при загрузке страницы: ${err}`);
     });
 
-
 //Изменение Аватара пользователя
 const popupEditAvatar = new PopupWithForm(popupAvatar, handleAvatarSubmit);
 function handleAvatarSubmit(userData) {
-    popupEditAvatar.loader(true);
+    popupEditAvatar.renderLoading(true);
     api.editAvatar(userData)
         .then(res => {
             userInfo.setAvatar(res)
             popupEditAvatar.close();
         })
         .catch(err => console.log("Произошла ошибка при смене Аватара:", err))
-        .finally(() => popupEditAvatar.loader(false))
+        .finally(() => popupEditAvatar.renderLoading(false))
 }
 popupEditAvatar.setEventListeners();
 
 // Изменение данных пользователя
 const popupEditProfile = new PopupWithForm(popupProfile, handleProfileSubmit);
 function handleProfileSubmit(userData) {
-    popupEditProfile.loader(true);
+    popupEditProfile.renderLoading(true);
     api.editUserInfo(userData)
         .then(res => {
             userInfo.setUserInfo(res);
             popupEditProfile.close();
         }).catch(err => console.log(`Данные не загружены: ${err}`))
-        .finally(() => popupEditProfile.loader(false))
+        .finally(() => popupEditProfile.renderLoading(false))
 }
 popupEditProfile.setEventListeners();
 
@@ -63,13 +62,13 @@ popupEditProfile.setEventListeners();
 const popupAdd = new PopupWithForm(popupAddCards, handleAddSubmit);
 
 function handleAddSubmit(cardData) {
-    popupAdd.loader(true);
+    popupAdd.renderLoading(true);
     api.addNewCard(cardData)
         .then(res => {
             cardsList.addItem(createCard(res))
             popupAdd.close();
         }).catch(err => console.log(`Произошла ошибка при добавлении карточки: ${err}`))
-        .finally(() => popupAdd.loader(false))
+        .finally(() => popupAdd.renderLoading(false, 'Создать'))
 
 }
 popupAdd.setEventListeners();
@@ -125,14 +124,13 @@ function handleLikeClick(id, card) {
             })
             .catch(err => console.log(`Произошла ошибка при удалении лайка: ${err}`))
     } else {
-        api.AddLike(id)
+        api.addLike(id)
             .then(res => {
                 card.setLikes(res.likes)
             })
             .catch(err => console.log(`Произошла ошибка при добавлении лайка: ${err}`))
     }
 }
-
 
 // Функции открытия попапов
 const popupImage = new PopupWithImage(popupPreview);
@@ -143,7 +141,7 @@ function handleCardClick(data) {
 }
 
 function handleClickOpenAvatarPopup() {
-    AvatarFormValidator.resetValidation();
+    avatarFormValidator.resetValidation();
     popupEditAvatar.open();
 }
 
@@ -160,13 +158,13 @@ function openAddPopup() {
 }
 
 // Валидация форм
-const AvatarFormValidator = new FormValidator(dataForm, formPopupAvatar);
+const avatarFormValidator = new FormValidator(dataForm, formPopupAvatar);
 const profileEditFormValidator = new FormValidator(dataForm, formProfileElement)
 const cardAddFormValidator = new FormValidator(dataForm, formElementAdd);
 
 profileEditFormValidator.enableValidation();
 cardAddFormValidator.enableValidation();
-AvatarFormValidator.enableValidation();
+avatarFormValidator.enableValidation();
 
 // Слушатели
 popupOpenButtonProfileElement.addEventListener('click', openProfilePopup);

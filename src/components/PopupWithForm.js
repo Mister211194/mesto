@@ -17,17 +17,8 @@ export default class PopupWithForm extends Popup {
         return inputsValue;
     }
 
-    loader(isLoading) {
-        if (isLoading) {
-            this._buttonSubmit.textContent = 'Сохранение...'
-        } else {
-            if (this._popup.classList.contains('add-cards-popup')) {
-                this._buttonSubmit.textContent = 'Создать'
-            } else {
-                this._buttonSubmit.textContent = 'Сохранить'
-            }
-
-        }
+    renderLoading(isLoading, buttonText = 'Сохранить') {
+        isLoading ? this._buttonSubmit.textContent = 'Сохранение...' : this._buttonSubmit.textContent = buttonText;
     }
 
     setEventListeners() {
