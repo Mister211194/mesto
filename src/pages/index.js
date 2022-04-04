@@ -65,7 +65,7 @@ function handleAddSubmit(cardData) {
     popupAdd.renderLoading(true);
     api.addNewCard(cardData)
         .then(res => {
-            cardsList.addItem(createCard(res))
+            cardsList.addItem(createCard(res), 'prepend')
             popupAdd.close();
         }).catch(err => console.log(`Произошла ошибка при добавлении карточки: ${err}`))
         .finally(() => popupAdd.renderLoading(false, 'Создать'))
